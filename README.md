@@ -116,6 +116,10 @@ Tests exercise HTTP requests through ASP.NET Core's in-process test server. A re
 
 See [TDD record](docs/tdd.md) for observed red/green runs, [design decisions](docs/design.md), [review/demo guide](docs/demo.md), and [verification results](docs/verification.md). CI builds with warnings treated as errors, runs tests with coverage, and builds the container.
 
+## AI assistance
+
+This solution was developed with substantial OpenAI Codex assistance, under candidate-defined simplicity and test-first constraints. The [AI-assisted development process](docs/ai-process.md) explains the division of work, observed workflow, verification, and decisions left for candidate review.
+
 ## Observability and scope
 
 Structured logs record payment ID/outcome, validation rejection, bank failure status, and trace ID. Standard HTTP client logs provide upstream duration and status; logs exclude request/response bodies, full card numbers, and CVVs. Problem Details include a trace ID. `/health` is a liveness check; a bank outage does not make the gateway process unhealthy.
