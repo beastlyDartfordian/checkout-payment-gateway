@@ -1,0 +1,10 @@
+services:
+  gateway:
+    build: .
+    ports:
+      - "127.0.0.1:5067:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      Bank__BaseUrl: http://bank_simulator:8080/
+    depends_on:
+      - bank_simulator

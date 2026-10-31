@@ -1,18 +1,22 @@
-﻿using PaymentGateway.Api.Models.Responses;
+using System.Collections.Concurrent;
+
+using PaymentGateway.Api.Models.Responses;
 
 namespace PaymentGateway.Api.Services;
 
-public class PaymentsRepository
+public sealed class PaymentsRepository
 {
-    public List<PostPaymentResponse> Payments = new();
-    
+    private readonly ConcurrentDictionary<Guid, PostPaymentResponse> _payments = new();
+
+    public IEnumerable<PostPaymentResponse> Payments => _payments.Values;
+
     public void Add(PostPaymentResponse payment)
     {
-        Payments.Add(payment);
+        if (!_payments.TryAdd(payment.Id, payment))
+        {
+            throw new InvalidOperationException("Payment ID already exists.");
+        }
     }
 
-    public PostPaymentResponse Get(Guid id)
-    {
-        return Payments.FirstOrDefault(p => p.Id == id);
-    }
+    public PostPaymentResponse? Get(Guid id) => _payments.GetValueOrDefault(id);
 }
