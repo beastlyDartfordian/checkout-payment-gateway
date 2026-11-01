@@ -18,7 +18,6 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
     {
         var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
         logger.LogInformation("Payment request rejected; trace {TraceId}", context.HttpContext.TraceIdentifier);
-        // Binding exceptions can contain submitted values. Return field names and safe messages only.
         var errors = context.ModelState.Where(entry => entry.Value!.Errors.Count > 0)
             .ToDictionary(entry => entry.Key, _ => new[] { "Invalid or missing value." });
         return new BadRequestObjectResult(new ValidationProblemDetails(errors)

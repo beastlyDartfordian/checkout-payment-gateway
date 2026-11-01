@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-"""Exercise a running gateway against the supplied bank simulator. Synthetic data only."""
 import datetime
 import json
 import sys

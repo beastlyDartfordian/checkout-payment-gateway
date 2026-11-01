@@ -53,7 +53,7 @@ public class PaymentValidationTests
 
     [Theory]
     [MemberData(nameof(InvalidRequests))]
-    public async Task RejectsInvalidRequestWithoutCallingBank(string scenario, Dictionary<string, object?> request)
+    public async Task given_an_invalid_payment_request_when_submitted_then_rejects_without_calling_bank(string scenario, Dictionary<string, object?> request)
     {
         _ = scenario;
         using var bank = new RecordingBankHandler();
@@ -75,7 +75,7 @@ public class PaymentValidationTests
     [InlineData("{", "application/json")]
     [InlineData("null", "application/json")]
     [InlineData("{}", "application/json")]
-    public async Task RejectsInvalidJsonBody(string body, string contentType)
+    public async Task given_an_invalid_json_body_when_submitted_then_rejects_without_calling_bank(string body, string contentType)
     {
         using var bank = new RecordingBankHandler();
         using var factory = CreateFactory(bank);

@@ -9,7 +9,7 @@ namespace PaymentGateway.Api.Tests;
 public class ObservabilityTests
 {
     [Fact]
-    public async Task OpenApiDescribesActualResponsesAndCompletedStatuses()
+    public async Task given_the_payment_api_when_reading_openapi_then_documents_actual_responses_and_completed_statuses()
     {
         using var bank = new RecordingBankHandler();
         using var factory = PaymentValidationTests.CreateFactory(bank);
@@ -32,7 +32,7 @@ public class ObservabilityTests
     }
 
     [Fact]
-    public async Task HealthEndpointReportsProcessHealthWithoutCallingBank()
+    public async Task given_a_running_gateway_when_checking_health_then_reports_healthy_without_calling_bank()
     {
         using var bank = new RecordingBankHandler();
         using var factory = PaymentValidationTests.CreateFactory(bank);
@@ -46,7 +46,7 @@ public class ObservabilityTests
     }
 
     [Fact]
-    public async Task LogsOutcomeRejectionAndFailureWithoutCardData()
+    public async Task given_payment_outcomes_rejections_and_failures_when_logged_then_records_safe_correlated_events()
     {
         using var bank = new RecordingBankHandler();
         using var logs = new CapturedLogs();

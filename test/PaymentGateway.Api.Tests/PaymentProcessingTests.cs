@@ -13,7 +13,7 @@ public class PaymentProcessingTests
     [Theory]
     [InlineData(true, "Authorized")]
     [InlineData(false, "Declined")]
-    public async Task CreatesPaymentAndRetrievesSameSafeDetails(bool authorized, string status)
+    public async Task given_a_bank_outcome_when_processing_payment_then_creates_a_retrievable_safe_result(bool authorized, string status)
     {
         string? bankBody = null;
         using var bank = new RecordingBankHandler
@@ -68,7 +68,7 @@ public class PaymentProcessingTests
     [InlineData("GBP", "12345678901234", "123", 1, 1, 2031)]
     [InlineData("USD", "1234567890123456789", "0123", 2147483647, 12, 2031)]
     [InlineData("EUR", "1234567890123456", "001", 100, 7, 2030)]
-    public async Task AcceptsValidBoundaries(string currency, string card, string cvv, int amount, int month, int year)
+    public async Task given_valid_boundary_values_when_submitted_then_creates_payment(string currency, string card, string cvv, int amount, int month, int year)
     {
         using var bank = new RecordingBankHandler();
         using var factory = PaymentValidationTests.CreateFactory(bank);
@@ -96,7 +96,7 @@ public class PaymentProcessingTests
     [InlineData(200, "null", 502)]
     [InlineData(200, "{\"authorized\": \"yes\"}", 502)]
     [InlineData(200, "{\"authorized\": null}", 502)]
-    public async Task BankFailureDoesNotCreatePaymentOrRetry(int bankStatus, string body, int expectedStatus)
+    public async Task given_a_failed_or_invalid_bank_response_when_processing_payment_then_returns_error_without_storing_or_retrying(int bankStatus, string body, int expectedStatus)
     {
         using var bank = new RecordingBankHandler
         {
@@ -123,7 +123,7 @@ public class PaymentProcessingTests
     [Theory]
     [InlineData(false, 503)]
     [InlineData(true, 504)]
-    public async Task ConnectionFailureOrTimeoutHasNoInventedOutcome(bool timeout, int expectedStatus)
+    public async Task given_a_bank_connection_failure_or_timeout_when_processing_payment_then_returns_error_without_inventing_outcome(bool timeout, int expectedStatus)
     {
         using var bank = new RecordingBankHandler
         {

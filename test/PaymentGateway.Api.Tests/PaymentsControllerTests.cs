@@ -18,17 +18,14 @@ public class PaymentsControllerTests
     [Theory]
     [InlineData(PaymentStatus.Authorized)]
     [InlineData(PaymentStatus.Declined)]
-    public async Task RetrievesSavedPaymentDetails(PaymentStatus status)
+    public async Task given_a_saved_payment_when_retrieved_then_returns_exact_payment_details(PaymentStatus status)
     {
-        // Arrange
         var payment = CreatePayment(status);
         using var factory = CreateFactory(payment);
         using var client = factory.CreateClient();
 
-        // Act
         using var response = await client.GetAsync($"/api/Payments/{payment.Id}");
 
-        // Assert against JSON rather than deserializing into the API's response model.
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         var body = await response.Content.ReadFromJsonAsync<JsonElement>();
         Assert.Equal(payment.Id, body.GetProperty("id").GetGuid());
@@ -42,7 +39,7 @@ public class PaymentsControllerTests
     }
 
     [Fact]
-    public async Task Returns404IfPaymentNotFound()
+    public async Task given_an_unknown_payment_id_when_retrieved_then_returns_not_found()
     {
         using var factory = CreateFactory();
         using var client = factory.CreateClient();
@@ -53,7 +50,7 @@ public class PaymentsControllerTests
     }
 
     [Fact]
-    public async Task ReturnsOnlySafePaymentFields()
+    public async Task given_a_saved_payment_when_retrieved_then_returns_only_safe_fields()
     {
         var payment = CreatePayment(PaymentStatus.Authorized);
         using var factory = CreateFactory(payment);
@@ -71,7 +68,7 @@ public class PaymentsControllerTests
     }
 
     [Fact]
-    public async Task ReturnsLastFourDigitsWithLeadingZeros()
+    public async Task given_a_card_suffix_with_leading_zeros_when_retrieved_then_preserves_all_four_digits()
     {
         var payment = CreatePayment(PaymentStatus.Authorized);
         payment.CardNumberLastFour = "0007";
